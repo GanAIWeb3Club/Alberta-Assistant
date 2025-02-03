@@ -27,7 +27,7 @@ const scanIP = (ip) => {
                 console.error(`Error scanning ${ip}:`, stderr);
                 reject(error);
             } else {
-                console.log(`Scan completed for ${ip} in ${scanDuration} seconds, ${stdout}, /n results saved to ${outputFile}`);
+                console.log(`Scan completed for ${ip} in ${scanDuration} seconds, /n results saved to ${outputFile}`);
                 resolve(outputFile);
             }
         });
