@@ -1,0 +1,28 @@
+[
+  {
+    "hostname": "vmi2018038.contaboserver.net",
+    "ip": "158.220.105.69",
+    "mac": null,
+    "openPorts": [
+      {
+        "port": 22,
+        "protocol": "tcp",
+        "service": "ssh",
+        "method": "probed"
+      },
+      {
+        "port": 80,
+        "protocol": "tcp",
+        "service": "http",
+        "method": "probed"
+      },
+      {
+        "port": 8080,
+        "protocol": "tcp",
+        "service": "http-proxy",
+        "method": "probed"
+      }
+    ],
+    "osNmap": "Linux 5.0 - 5.14"
+  }
+]

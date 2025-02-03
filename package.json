@@ -1,0 +1,23 @@
+{
+  "name": "alberta-assistant",
+  "version": "1.0.0",
+  "description": "AI assistant to keep nodes secured.  The goal of this project is to create an AI assistant that can scan ports, detect vulnerabilities, and provide solutions to secure the system. Bot generates a summary report of the vulnerabilities in Telegram.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GanAIWeb3Club/Alberta-Assistant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GanAIWeb3Club/Alberta-Assistant/issues"
+  },
+  "homepage": "https://github.com/GanAIWeb3Club/Alberta-Assistant#readme",
+  "dependencies": {
+    "node-nmap": "^4.0.0"
+  }
+}
