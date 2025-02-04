@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/GanAIWeb3Club/Alberta-Assistant#readme",
   "dependencies": {
+    "atoma-sdk": "github:atoma-network/atoma-sdk-typescript",
+    "dotenv": "^16.4.7",
     "node-nmap": "^4.0.0"
   }
 }
