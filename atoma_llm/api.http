@@ -1,0 +1,16 @@
+@model = deepseek-ai/DeepSeek-R1
+@api_token = update_me_taking_from_.env
+### Completion LLM chat
+GET https://api.atoma.network/v1/chat/completions
+Content-Type: application/json 
+Authorization: Bearer {{api_token}}
+
+{
+    "stream": true,
+    "model": "{{model}}",
+    "messages": [{
+            "role": "user",
+            "content": "What is the capital of France?"
+    }],
+    "max_tokens": 128
+  }

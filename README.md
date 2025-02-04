@@ -106,3 +106,23 @@ Example output
   }
 ]
 ```
+
+## Atoma integration
+
+### Installation
+
+```bash
+
+npm install dotenv
+npm add https://github.com/atoma-network/atoma-sdk-typescript.git
+```
+
+### Run
+
+```bash
+node atoma_llm/atoma.js
+```
+
+### API reference
+
+API docs: https://docs.atoma.network/cloud-api-reference/chat/create-chat-completion
