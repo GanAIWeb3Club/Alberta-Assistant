@@ -12,7 +12,7 @@ function scanIP(targetIP) {
 
 
     scan.on('complete', function(data) {
-      const outputFile = `./scanner/nuclei_results/${targetIP}.json`;
+      const outputFile = `./scanner/nmap_results/${targetIP}.json`;
       fs.writeFileSync(outputFile, JSON.stringify(data, null, 2));
       console.log(`Scan results for ${targetIP} saved to ${outputFile}`);
       resolve();

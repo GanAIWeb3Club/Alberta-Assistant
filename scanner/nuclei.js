@@ -15,7 +15,7 @@ if (!fs.existsSync(outputDir)) {
 const scanIP = (ip) => {
     return new Promise((resolve, reject) => {
         const outputFile = path.join(outputDir, `${ip}.json`);
-        const command = `nuclei -target ${ip} -j -o ${outputFile}`;
+        const command = `nuclei -target ${ip} -stream -j -o ${outputFile}`;
         console.log('Running command:', command);
         const startTime = Date.now();
         

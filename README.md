@@ -12,8 +12,7 @@ Ubuntu VPS scan example (server IP address is - 158.220.105.69 )
 ### Tools options
 
 - Nmap
-- nuclei: Nuclei is a fast tool for configurable targeted scanning based on templates offering massive extensibility and ease of use. https://github.com/projectdiscovery/nuclei
-nuclei requires go1.22 to install successfully. Run the following command to get the repo:
+- nuclei: Nuclei is a fast tool for configurable targeted scanning based on templates offering massive extensibility and ease of use: https://github.com/projectdiscovery/nuclei
 
 #### Nuclei installation
 
@@ -21,9 +20,20 @@ nuclei requires go1.22 to install successfully. Run the following command to get
 #MacOs  installation
 brew install nuclei
 nuclei -h
-nuclei -target 158.220.105.69
-nuclei -target 158.220.105.69 -j ./scanner/nuclei_results/test.json
+# Console output
+sudo nuclei -target 158.220.105.69
+# Streaming output in console and JSON
+sudo nuclei -target 158.220.105.69 -stream -j -o ./scanner/nuclei_results/stream.json
+
+# JSON output
+sudo nuclei -target 158.220.105.69 -silent -j -o ./scanner/nuclei_results/test.json
+# Fuzzing
+sudo nuclei -target 158.220.105.69 -dast -j -o ./scanner/nuclei_results/dast.json 
+
 ```
+
+Console output
+![Alt text](docs/pics/nuclei_console_ouptu.png)
 
 #### Nuclei usage
 
