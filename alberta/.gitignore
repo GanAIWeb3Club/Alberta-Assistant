@@ -1,0 +1,14 @@
+*.ts
+dist
+!index.ts
+!character.ts
+.env
+node_modules
+dist/
+data/
+content_cache/
+pnpm-lock.yaml
+
+db.sqlite
+.idea
+.tee-cloud
