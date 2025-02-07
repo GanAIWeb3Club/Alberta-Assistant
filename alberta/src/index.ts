@@ -4,6 +4,7 @@ import path from "path";
 import { DirectClient } from "@elizaos/client-direct";
 import { bootstrapPlugin } from "@elizaos/plugin-bootstrap";
 import { createNodePlugin } from "@elizaos/plugin-node";
+import { suiPlugin } from "@elizaos/plugin-sui";
 import { fileURLToPath } from "url";
 import { initializeDbCache } from "./cache/index.ts";
 import { character } from "./character.ts";
@@ -58,6 +59,7 @@ export function createAgent(
     plugins: [
       bootstrapPlugin,
       nodePlugin,
+      suiPlugin
     ].filter(Boolean),
     providers: [],
     actions: [],
