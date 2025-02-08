@@ -1,11 +1,9 @@
-import net from "net";
-import nodeNmap from "node-nmap";
 import { composeContext, elizaLogger, generateObject, generateText } from "@elizaos/core";
 import { generateMessageResponse, generateTrueOrFalse } from "@elizaos/core";
+import { exec } from "child_process";
+import { promisify } from "util";
 import { extractDomainNameTemplate, summarizePortsScanReportTemplate } from "./templates.ts";
 import { cleanModelResponse } from "./utils.ts";
-
-const { NmapScan } = nodeNmap;
 
 import {
     type Action,
@@ -18,95 +16,97 @@ import {
     type State,
 } from "@elizaos/core";
 
-interface ScanResult {
-  ports: string[];
-  error: string;
+
+const execAsync = promisify(exec);
+
+interface NmapResult {
+    target: string;
+    output: string;
+    error?: string;
+    timestamp: Date;
+    duration: number;  // scan duration in milliseconds
 }
 
-// Validate if string is a valid domain name
-function isValidTarget(target: string): boolean {
-  const isDomain = /^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(target);
-  const isIP = net.isIP(target) !== 0;
-  return isDomain || isIP;
-}
+export class NetworkScanner {
+    private readonly defaultTimeout = 300000; // 5 minutes
+    private readonly nmapCommand = 'nmap {target} -p 1-65535 -sV -O -v';
 
-// Function to scan a single target and return a Promise
-function scanTarget(target: string): Promise<ScanResult> {
-  return new Promise((resolve) => {
-    if (!isValidTarget(target)) {
-      resolve({
-        ports: [],
-        error: `Invalid target format: ${target}`
-      });
-      return;
-    }
+    /**
+     * Sanitizes target input to prevent command injection
+     */
+    private sanitizeTarget(target: string): string {
+        // Remove any shell special characters and whitespace
+        const sanitized = target
+            .replace(/[;&|`$()]/g, '')
+            .replace(/\s+/g, '')
+            .trim();
 
-    const sanitizedTarget = target.replace(/[;&|`$()]/g, '');
-    
-    try {
-      const scan = new NmapScan(sanitizedTarget, '-p 1-65535 -sV -O -v');
+        // Validate IP or domain format
+        const isValidIP = /^(\d{1,3}\.){3}\d{1,3}$/.test(sanitized);
+        const isValidDomain = /^[a-zA-Z0-9][a-zA-Z0-9-._]*[a-zA-Z0-9]$/.test(sanitized);
 
-      const timeoutId = setTimeout(() => {
-        scan.cancelScan();
-        resolve({
-          ports: [],
-          error: 'Scan timeout after 3 minutes'
-        });
-      }, 180000); // 3 minute timeout
-
-      scan.on('complete', (data) => {
-        clearTimeout(timeoutId);
-        if (!data || !data[0] || !data[0].openPorts) {
-          resolve({
-            ports: [],
-            error: ''  // No error, just no open ports found
-          });
-          return;
+        if (!isValidIP && !isValidDomain) {
+            throw new Error(`Invalid target format: ${target}`);
         }
-        const ports = data[0].openPorts.map(port => port.port.toString());
-        resolve({
-          ports,
-          error: ''
-        });
-      });
 
-      scan.on('error', (error) => {
-        clearTimeout(timeoutId);
-        resolve({
-          ports: [],
-          error: `Scan error: ${error.message || error}`
-        });
-      });
-
-      scan.startScan();
-    } catch (error) {
-      resolve({
-        ports: [],
-        error: `Scan initialization failed: ${error.message || error}`
-      });
+        return sanitized;
     }
-  });
-}
 
-// Main function to scan all targets
-async function *scanAllTargets(targets: string[]): AsyncGenerator<[string, ScanResult]> {
-  // Validate targets array is not empty
-  if (targets.length === 0) {
-    throw new Error('Empty targets array');
-  }
-  for (const target of targets) {
-      try {
-        const result = await scanTarget(target);
-        yield [target, result];
-      } catch (error) {
-        yield [target, {
-          ports: [],
-          error: `Unexpected error: ${error.message || error}`
-        }];
-      }
-  }
-}
+    private async runNmapScan(target: string, timeout: number = this.defaultTimeout): Promise<NmapResult> {
+        const startTime = Date.now();
+        
+        try {
+            const sanitizedTarget = this.sanitizeTarget(target);
+            const command = this.nmapCommand.replace('{target}', sanitizedTarget);
 
+            const { stdout, stderr } = await execAsync(command, { 
+                timeout,
+                killSignal: 'SIGTERM'
+            });
+
+            return {
+                target: sanitizedTarget,
+                output: stdout,
+                error: stderr || undefined,
+                timestamp: new Date(),
+                duration: Date.now() - startTime
+            };
+
+        } catch (error) {
+            const isTimeout = error.code === 'ETIMEDOUT';
+            
+            return {
+                target,
+                output: '',
+                error: isTimeout ? 
+                    `Scan timed out after ${timeout/1000} seconds` : 
+                    error.message,
+                timestamp: new Date(),
+                duration: Date.now() - startTime
+            };
+        }
+    }
+
+    public async *scanTargets(
+        targets: string[], 
+        timeout?: number
+    ): AsyncGenerator<NmapResult> {
+        for (const target of targets) {
+            try {
+                const result = await this.runNmapScan(target, timeout);
+                yield result;
+            } catch (error) {
+                yield {
+                    target,
+                    output: '',
+                    error: `Failed to scan target: ${error.message}`,
+                    timestamp: new Date(),
+                    duration: 0
+                };
+            }
+        }
+    }
+}
 
 export const scanPorts: Action = {
     name: "SCAN_PORTS_ACTION",
@@ -133,8 +133,8 @@ export const scanPorts: Action = {
 
         // Add type assertion or validation
         const targets = (response.targets || []) as string[];
-        for await (const [target, scanResult] of  scanAllTargets(targets)) {
-            state.targetHost = target;
+        const scanner = new NetworkScanner();
+        for await (const scanResult of  scanner.scanTargets(targets)) {
             state.scanResult = JSON.stringify(scanResult);
             const scanPortsContext = composeContext({
                 state: state,

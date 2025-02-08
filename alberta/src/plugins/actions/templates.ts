@@ -12,13 +12,26 @@ Text to analyze:
 {{lastMessage}}
 `; 
 
-export const summarizeAvailabilityReportTemplate = `Please provide a brief, user-friendly summary of these network diagnostics results:
-- start with the Domain name or IP or host name which has been checked
-- Follow with a one-line status overview
-- Follow with 1-2 sentences explaining any issues in simple terms
-- http and https are not must have services
-- provide recommendations (if needed)
-- Use everyday language, avoid technical terms where possible but don't oversimplify important details
+export const summarizeAvailabilityReportTemplate = `Create a brief network diagnostics summary using Telegram markdown formatting (*bold* or **bold**). Make the message friendly with appropriate emojis.
+
+Template structure:
+*Checked:* [host/IP] 🔍
+*Status:* [One-line overview] [relevant emoji: ✅ for good, ⚠️ for issues]
+
+[2-3 sentences explaining the state, with emojis for key points]
+
+[If issues found] *Recommendation:* [Brief advice] 🔧
+
+
+Notes:
+http and https are not must have services. 
+Use everyday language, avoid technical terms where possible but don't oversimplify important details
+
+Use Telegram-compatible markdown:
+- Use single *asterisks* for bold text
+- Add relevant emojis for visual clarity
+- Keep spacing consistent
+- Avoid using underscores or backticks
 
 Tested host:
 {{targetHost}}
@@ -26,17 +39,25 @@ Tested host:
 Diagnostic Results:
 {{availabilityResult}}`;
 
-export const summarizePortsScanReportTemplate = `Please provide a brief, user-friendly summary of port scanning:
-- start with the Domain name or IP or host name which has been checked
-- Follow with the list of open ports and short explanation about potential services
-- Follow with 1-2 sentences explaining any issues in simple terms
-- provide recommendations (if needed)
-- Use everyday language, avoid technical terms where possible but don't oversimplify important details
+export const summarizePortsScanReportTemplate = `Please provide a brief, user-friendly summary of the port scan results in a format suitable for Telegram. Use **bold text**, emojis, and bullet points for clarity. Follow this structure:
 
-Tested host:
-{{targetHost}}
+1. **Start with the target** (IP/hostname) in bold.  
+2. **OS & Uptime**: Include the likely operating system and uptime in bold.  
+3. **Open Ports**: List each open port with a short description and status. Use bold for port numbers and statuses.  
+4. **Key Issues**: Highlight 1-2 sentences explaining any issues in simple terms. Use bold for emphasis.  
+5. **Recommendations**: Provide actionable recommendations (if needed). Use bullet points and bold for key actions.  
+6. **Add a light-hearted note or emoji** at the end to keep the tone friendly.  
 
-Diagnostic Results:
-{{scanResult}}
+Avoid technical jargon where possible, but don’t oversimplify important details.  
 
-`;
+The scan result has the following structure:  
+interface NmapResult {  
+    target: string;  
+    output: string;  
+    error?: string;  
+    timestamp: Date;  
+    duration: number;  // scan duration in milliseconds  
+}  
+
+Scan Results:  
+{{scanResult}}`;
