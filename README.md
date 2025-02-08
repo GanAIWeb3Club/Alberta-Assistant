@@ -1,6 +1,6 @@
 # Alberta-Assistant
 
-AI assistant to keep nodes secured. 
+AI assistant to keep nodes secured.
 The goal of this project is to create an AI assistant that can scan ports, detect vulnerabilities, and provide solutions to secure the system.
 Bot generates a summary report of the vulnerabilities in Telegram.
 
@@ -12,7 +12,7 @@ Ubuntu VPS scan example (server IP address is - 158.220.105.69 )
 ### Tools options
 
 - Nmap
-- nuclei: Nuclei is a fast tool for configurable targeted scanning based on templates offering massive extensibility and ease of use: https://github.com/projectdiscovery/nuclei
+- nuclei: Nuclei is a fast tool for configurable targeted scanning based on templates offering massive extensibility and ease of use: <https://github.com/projectdiscovery/nuclei>
 
 #### Nuclei installation
 
@@ -125,4 +125,22 @@ node atoma_llm/atoma.js
 
 ### API reference
 
-API docs: https://docs.atoma.network/cloud-api-reference/chat/create-chat-completion
+API docs: <https://docs.atoma.network/cloud-api-reference/chat/create-chat-completion>
+
+## Agent setup
+
+Node 23 is required to run the agent.
+
+```bash
+nvm install 23.3.0
+npm install @elizaos/plugin-sui
+pnpm clean && pnpm install && pnpm build
+```
+Start agent
+```bash
+pnpm start
+```
+
+### SUI blockchain integration
+
+![Alt text](docs/pics/sui-plugin-wallet.png)
