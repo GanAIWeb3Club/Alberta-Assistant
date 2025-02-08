@@ -7,7 +7,7 @@ export const character: Character = {
     name: "Alberta",
     username: "alberta",
     plugins: [bootstrapPlugin, nodePlugin],
-    // clients: [],
+    clients: [Clients.TELEGRAM],
     modelProvider: ModelProviderName.ATOMA,
     // settings: {
     //     secrets: {},

@@ -1,8 +1,9 @@
 import net from "net";
 import nodeNmap from "node-nmap";
-import { composeContext, elizaLogger, generateObject } from "@elizaos/core";
+import { composeContext, elizaLogger, generateObject, generateText } from "@elizaos/core";
 import { generateMessageResponse, generateTrueOrFalse } from "@elizaos/core";
-import { extractDomainNameTemplate } from "./templates.ts";
+import { extractDomainNameTemplate, summarizePortsScanReportTemplate } from "./templates.ts";
+import { cleanModelResponse } from "./utils.ts";
 
 const { NmapScan } = nodeNmap;
 
@@ -20,14 +21,6 @@ import {
 interface ScanResult {
   ports: string[];
   error: string;
-}
-
-interface ScanResults {
-  [key: string]: ScanResult;
-}
-
-interface ScanResponse {
-  targets: string[];
 }
 
 // Validate if string is a valid domain name
@@ -51,15 +44,15 @@ function scanTarget(target: string): Promise<ScanResult> {
     const sanitizedTarget = target.replace(/[;&|`$()]/g, '');
     
     try {
-      const scan = new NmapScan(sanitizedTarget, '-p- -n --open');
+      const scan = new NmapScan(sanitizedTarget, '-p 1-65535 -sV -O -v');
 
       const timeoutId = setTimeout(() => {
         scan.cancelScan();
         resolve({
           ports: [],
-          error: 'Scan timeout after 5 minutes'
+          error: 'Scan timeout after 3 minutes'
         });
-      }, 60000); // 1 minute timeout
+      }, 180000); // 3 minute timeout
 
       scan.on('complete', (data) => {
         clearTimeout(timeoutId);
@@ -96,37 +89,22 @@ function scanTarget(target: string): Promise<ScanResult> {
 }
 
 // Main function to scan all targets
-async function scanAllTargets(targets: string[]): Promise<ScanResults> {
-  let response: ScanResponse;
-  const results: ScanResults = {};
-
+async function *scanAllTargets(targets: string[]): AsyncGenerator<[string, ScanResult]> {
   // Validate targets array is not empty
   if (targets.length === 0) {
     throw new Error('Empty targets array');
   }
-
-  // Maximum number of concurrent scans
-  const MAX_CONCURRENT_SCANS = 5;
-  
-  // Process targets in batches
-  for (let i = 0; i < targets.length; i += MAX_CONCURRENT_SCANS) {
-    const batch = targets.slice(i, i + MAX_CONCURRENT_SCANS);
-    const scanPromises = batch.map(async (target) => {
+  for (const target of targets) {
       try {
         const result = await scanTarget(target);
-        results[target] = result;
+        yield [target, result];
       } catch (error) {
-        results[target] = {
+        yield [target, {
           ports: [],
           error: `Unexpected error: ${error.message || error}`
-        };
+        }];
       }
-    });
-
-    await Promise.all(scanPromises);
   }
-
-  return results;
 }
 
 
@@ -138,10 +116,12 @@ export const scanPorts: Action = {
     validate: async (runtime: IAgentRuntime, message: Memory) => {
         return true;
     },
-    handler: async (runtime: IAgentRuntime, message: Memory, state: State) => {
+    handler: async (runtime: IAgentRuntime, message: Memory, state: State, options?: {
+        [key: string]: unknown;
+    }, callback?: HandlerCallback) => {
         state.lastMessage = message.content.text;
         const namesContext = composeContext({
-            state: state,
+            state: state,   
             template: extractDomainNameTemplate,
         });
         elizaLogger.debug(`CONTEXT: ${namesContext}`);
@@ -153,10 +133,29 @@ export const scanPorts: Action = {
 
         // Add type assertion or validation
         const targets = (response.targets || []) as string[];
-        const results = await scanAllTargets(targets);
-
-        console.log(`action handler scanPorts: Scanning ports. ${JSON.stringify(results)}`);
-        return "We're scanning the port";
+        for await (const [target, scanResult] of  scanAllTargets(targets)) {
+            state.targetHost = target;
+            state.scanResult = JSON.stringify(scanResult);
+            const scanPortsContext = composeContext({
+                state: state,
+                template: summarizePortsScanReportTemplate,
+            });
+            elizaLogger.debug(`SCAN PORTS CONTEXT: ${scanPortsContext}`);
+            const scanPortsReportResponse = await generateText({
+                runtime,
+                context: scanPortsContext,
+                modelClass: ModelClass.LARGE,
+            });
+            const cleanScanPortsReportResponse = cleanModelResponse(scanPortsReportResponse);
+            elizaLogger.debug(`SCAN PORTS REPORT: ${cleanScanPortsReportResponse}`);
+            const response: Content = {
+                inReplyTo: message.id,
+                text: cleanScanPortsReportResponse,
+                action: "SCAN_PORTS_ACTION"
+            };
+            callback(response);
+        }
+        return true;
     },
     examples: [
         [

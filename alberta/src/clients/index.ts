@@ -10,7 +10,6 @@ export async function initializeClients(
   const clientTypes = character.clients?.map((str) => str.toLowerCase()) || [];
   console.log('client!!!');
   if (clientTypes.includes("auto")) {
-    console.log('AUTO client!!!');
     const autoClient = await AutoClientInterface.start(runtime);
     if (autoClient) clients.push(autoClient);
   }
@@ -29,6 +28,5 @@ export async function initializeClients(
       }
     }
   }
-  console.log(`Clients: ${clients.length}`);
   return clients;
 }

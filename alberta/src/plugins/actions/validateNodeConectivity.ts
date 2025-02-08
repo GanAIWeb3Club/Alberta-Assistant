@@ -74,24 +74,21 @@ export class NetworkDiagnosticScanner {
         };
     }
 
-    public async scanMultipleTargets(targets: string[]): Promise<DiagnosticReport> {
-        const report: DiagnosticReport = {};
-
+    public async *scanMultipleTargets(targets: string[]): AsyncGenerator<[string, TargetTests]> {
         for (const target of targets) {
             try {
-                report[target] = await this.runIndividualTests(target);
+                const result = await this.runIndividualTests(target);
+                yield [target, result];
             } catch (error) {
-                report[target] = {
+                yield [target, {
                     connection: { status: false, message: `Error: ${error.message}` },
                     dns: { status: false, message: `Error: ${error.message}` },
                     ping: { status: false, message: `Error: ${error.message}` },
                     http: { status: false, message: `Error: ${error.message}` },
                     https: { status: false, message: `Error: ${error.message}` }
-                };
+                }];
             }
         }
-
-        return report;
     }
 }
 
@@ -122,26 +119,29 @@ export const validateNodeConnection: Action = {
         const targets = (namesResponse.targets || []) as string[];
 
         const scanner = new NetworkDiagnosticScanner();
+        for await (const [target, testResult] of scanner.scanMultipleTargets(targets)){
+            state.targetHost = target;
+            state.availabilityResult = JSON.stringify(testResult);
+            const availabilityContext = composeContext({
+                state: state,
+                template: summarizeAvailabilityReportTemplate,
+            });
+            elizaLogger.debug(`AVAILABILITY CONTEXT: ${availabilityContext}`);
+            const availabilityResponse = await generateText({
+                runtime,
+                context: availabilityContext,
+                modelClass: ModelClass.LARGE,
+            });
+            const cleanAvailabilityResponse = cleanModelResponse(availabilityResponse);
+            elizaLogger.debug(`AVAILABILITY REPORT: ${cleanAvailabilityResponse}`);
+            const response: Content = {
+                inReplyTo: message.id,
+                text: cleanAvailabilityResponse,
+                action: "VALIDATE_HOST_CONNECTIVITY_ACTION"
+            };
+            callback(response);
+        }
         const availabilityResult =  await scanner.scanMultipleTargets(targets);
-        state.availabilityResult = JSON.stringify(availabilityResult);
-        const availabilityContext = composeContext({
-            state: state,
-            template: summarizeAvailabilityReportTemplate,
-        });
-        elizaLogger.debug(`AVAILABILITY CONTEXT: ${availabilityContext}`);
-        const availabilityResponse = await generateText({
-            runtime,
-            context: availabilityContext,
-            modelClass: ModelClass.LARGE,
-        });
-        const cleanAvailabilityResponse = cleanModelResponse(availabilityResponse);
-        elizaLogger.debug(`AVAILABILITY REPORT: ${cleanAvailabilityResponse}`);
-        const response: Content = {
-            inReplyTo: message.id,
-            text: cleanAvailabilityResponse,
-            action: "VALIDATE_HOST_CONNECTIVITY_ACTION"
-        };
-        callback(response);
 
         return true;
     },
