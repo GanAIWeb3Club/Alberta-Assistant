@@ -24,7 +24,6 @@ The project takes on a significant challenge—securing server nodes in real tim
 1. **Scanning Tools Used**:
 
 - **Nmap**: A powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
-- **Nuclei**: A fast, template-based vulnerability scanner that helps identify known security flaws in the server configuration.
 
 ## 💡 Process Flow
   
@@ -39,10 +38,11 @@ graph TD;
     TopUp -->|Checks Atoma balance| AtomaBalance
     AtomaBalance -->|Sends USDC to Atoma if needed| USDCTransfer
     USDCTransfer -->|Sends scan results to Atoma LLM  & retrieves action plan| Scan
-    Scan -->|Host/IP Full scan| Deepseak
+    Scan -->|Host/IP Full scan data| Deepseak
     Deepseak -->|Generates Summary report| Formatter
     Deepseak -->|Provides tokens stats| Formatter
-    Formatter -->|Asks for user feedback & rating | Feedback
+    Formatter -->|Asks for user feedback & rating | User
+    Formatter -->|Crafts user satisfaction form | Feedback
     Feedback -->|Final response to user| TelegramBot-Eliza
     TelegramBot-Eliza -->|Scanning report, status| User
 
@@ -67,7 +67,7 @@ Host scanner tool **Nmap** is a powerful tool for network discovery and vulnerab
 
 ## 🌟 Agent setup
 
-Node 23 is required to run the agent (```nvm install 23.3.0```).
+Node v23 is required to run the agent (```nvm install 23.3.0```).
 
 1. Clone the Repository
 
@@ -76,19 +76,19 @@ git clone https://github.com/yourusername/alberta-ai-assistant.git
 cd alberta
 ```
 
-1. Install Dependencies
+2. Install Dependencies
 
 ```bash
 pnpm clean && pnpm install && pnpm build
 ```
 
-1. Start agent
+3. Start agent
 
 ```bash
 pnpm start
 ```
 
-1. [DEV mode] Start agent in debug mode
+[DEV mode] Start agent in debug mode
 
 ```bash
 DEFAULT_LOG_LEVEL=debug pnpm start --dev 
