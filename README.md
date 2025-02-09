@@ -3,6 +3,11 @@
 <img src="docs/pics/alberta-bot.jpg" alt="Alt text" width="100" height="100" /> 
 
 
+```🚺 Alberta: I am ready to check your servers... Go ON! ```   
+```👪 You: Tell me about my server vulnerabilities. IP XXX.XXX.XXX.XXX```   
+
+> Bot link: https://t.me/AlbertaAssistantBot
+
 Alberta AI Assistant 🤖 is an innovative Telegram bot designed to enhance the cybersecurity of server nodes through AI-driven analysis and secure server management. By scanning ports, detecting vulnerabilities, and offering actionable solutions, the bot aims to provide seamless protection for IT infrastructure.
 
 This project leverages the ```SUI blockchain``` and integrates with the ```Atoma LLM models``` to create a robust solution that generates vulnerability reports directly within Telegram. Additionally, it uses the ElizaOS framework to configure an agent with Atoma keys within the SUI plugin.
@@ -25,30 +30,30 @@ The project takes on a significant challenge—securing server nodes in real tim
   
 ```mermaid
 graph TD;
-    A[User opens bot (Bot has SUI wallet)] --> B[User connects SUI wallet (To be implemented)]
-    B --> C[User provides server host/IP]
-    C --> D[Bot checks server correctness & scan possibility]
-    D --> E[Bot checks user's SUI balance (To be implemented)]
-    E --> F[Bot asks to top up balance if needed (To be implemented)]
-    F --> G[Bot checks Atoma balance]
-    G --> H[Bot sends USDC to Atoma (If needed)]
-    H --> I[Bot sends scan results to Atoma LLM (Deepseak) and retrieves action plan]
-    I --> J[Bot calculates token usage and LLM costs (Mapping to user account) (To be implemented)]
-    J --> K[Bot asks for user feedback and rating (To be implemented)]
-    
-    %% Actors
-    A1[User] --> A
-    A2[Bot] --> B
-    A2 --> C
-    A2 --> D
-    A2 --> E
-    A2 --> F
-    A2 --> G
-    A2 --> H
-    A2 --> I
-    A2 --> J
-    A2 --> K
+    User-->| Server IP/Host | TelegramBot-Eliza
+    TelegramBot-Eliza -->|Connects SUI wallet| SUIWallet
+    SUIWallet -->|Get host/IP| VPS
+    VPS -->|Checks server correctness & scan possibility| InitialScanCheck
+    InitialScanCheck -->|Verifies user's SUI balance| SUIBalance
+    SUIBalance -->|Requests top-up if needed| TopUp
+    TopUp -->|Checks Atoma balance| AtomaBalance
+    AtomaBalance -->|Sends USDC to Atoma if needed| USDCTransfer
+    USDCTransfer -->|Sends scan results to Atoma LLM  & retrieves action plan| Scan
+    Scan -->|Host/IP Full scan| Deepseak
+    Deepseak -->|Generates Summary report| Formatter
+    Deepseak -->|Provides tokens stats| Formatter
+    Formatter -->|Asks for user feedback & rating | Feedback
+    Feedback -->|Final response to user| TelegramBot-Eliza
+    TelegramBot-Eliza -->|Scanning report, status| User
+
+  %% Highlight nodes with "To be implemented" in blue
+    style SUIWallet fill:#0077CC,stroke:#0077CC,stroke-width:2px
+    style TopUp fill:#0077CC,stroke:#0077CC,stroke-width:2px
+    style USDCTransfer fill:#0077CC,stroke:#0077CC,stroke-width:2px
+
 ```
+
+> Note: Highlighted actions are to be implemented in the future.
 
 ## 🛠️ Tools & Technologies
 
@@ -56,142 +61,9 @@ The bot currently handles scanning and vulnerability detection. Integration with
 
 The bot is built using the ```ElizaOS``` framework, ensuring maintainability and scalability. The implementation follows best practices for blockchain integration and Telegram bot development.
 
-Innovation: The integration of ```Atoma LLM provider``` for generating vulnerability reports within Telegram is a unique and innovative application of AI for real-time security reporting. The use of SUI blockchain for secure wallet management and transactions adds another layer of sophistication.
+The integration of ```Atoma LLM provider``` for generating vulnerability reports within Telegram is a unique and innovative application of AI for real-time security reporting. The use of SUI blockchain for secure wallet management and transactions adds another layer of sophistication.
 
-### Tools options
-
-- **Nmap**: a powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
-- **nuclei**: a fast tool for configurable targeted scanning based on templates offering massive extensibility and ease of use: <https://github.com/projectdiscovery/nuclei>
-
-#### Nuclei installation
-
-```bash
-#MacOs  installation
-brew install nuclei
-nuclei -h
-# Console output
-sudo nuclei -target 158.220.105.69
-# Streaming output in console and JSON
-sudo nuclei -target 158.220.105.69 -stream -j -o ./scanner/nuclei_results/stream.json
-
-# JSON output
-sudo nuclei -target 158.220.105.69 -silent -j -o ./scanner/nuclei_results/test.json
-# Fuzzing
-sudo nuclei -target 158.220.105.69 -dast -j -o ./scanner/nuclei_results/dast.json 
-
-```
-
-Console output
-![Alt text](docs/pics/nuclei_console_ouptu.png)
-
-#### Nuclei usage
-
-```bash
-sudo node scanner/nuclei.js
-```
-
-#### Nmap installation
-
-```bash
-# MacOS
-brew update
-brew install nmap
-
-# Ubuntu
-sudo apt update
-sudo apt install nmap
-
-npm init -y
-npm install node-nmap
-```
-
-#### Nmap usage
-
-```bash
-sudo node scanner/nmap.js
-```
-
-Example output
-
-```json
-[
-  {
-    "hostname": "vmi1972177.contaboserver.net",
-    "ip": "37.60.245.70",
-    "mac": null,
-    "openPorts": [
-      {
-        "port": 22,
-        "protocol": "tcp",
-        "service": "ssh",
-        "method": "probed"
-      },
-      {
-        "port": 80,
-        "protocol": "tcp",
-        "service": "http",
-        "method": "probed"
-      },
-      {
-        "port": 9000,
-        "protocol": "tcp",
-        "service": "http",
-        "method": "probed"
-      },
-      {
-        "port": 27017,
-        "protocol": "tcp",
-        "service": "mongodb",
-        "method": "probed"
-      },
-      {
-        "port": 31333,
-        "protocol": "tcp",
-        "service": "http",
-        "method": "probed"
-      }
-    ],
-    "osNmap": "Linux 5.0 - 5.14"
-  }
-]
-```
-
-### Atoma integration
-
-#### Installation
-
-```bash
-
-npm install dotenv
-npm add https://github.com/atoma-network/atoma-sdk-typescript.git
-```
-
-### Run
-
-```bash
-node atoma_llm/atoma.js
-```
-
-### API reference
-
-API docs: <https://docs.atoma.network/cloud-api-reference/chat/create-chat-completion>
-
-#### Insufficient funds
-
-```json
-HTTP/1.1 402 Payment Required
-....
-{
-  "error": {
-    "code": "BALANCE_ERROR",
-    "message": "Insufficient balance"
-  }
-}
-```
-
-#### SUI blockchain integration
-
-![Alt text](docs/pics/sui-plugin-wallet.png)
+Host scanner tool **Nmap** is a powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
 
 ## 🌟 Agent setup
 
@@ -214,6 +86,12 @@ pnpm clean && pnpm install && pnpm build
 
 ```bash
 pnpm start
+```
+
+1. [DEV mode] Start agent in debug mode
+
+```bash
+DEFAULT_LOG_LEVEL=debug pnpm start --dev 
 ```
 
 ## Planned Features

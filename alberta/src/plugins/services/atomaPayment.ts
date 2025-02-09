@@ -20,14 +20,14 @@ export class AtomaPayment extends Service {
     initialize(runtime: IAgentRuntime): Promise<void> {
         this.suiClient = new SuiClient({
             url: getFullnodeUrl(
-                    runtime.getSetting("SUI_NETWORK") as SuiNetwork
+                runtime.getSetting("SUI_NETWORK") as SuiNetwork
             ),
         });
         this.network = runtime.getSetting("SUI_NETWORK") as SuiNetwork;
         this.agentAccount = runtime.getSetting("SUI_AGENT_ACCOUNT");
         elizaLogger.log(`SUI_AGENT_ACCOUNT: ${this.agentAccount}`);
         this.atomaAccount = runtime.getSetting("SUI_ATOMA_ACCOUNT");
-        elizaLogger.log(`SUI_ACCOUNT_ACCOUNT: ${this.atomaAccount}`);
+        elizaLogger.log(`SUI_ATOMA_ACCOUNT: ${this.atomaAccount}`);
         this.coinType = runtime.getSetting("SUI_COIN_TYPE");
         return null;
     }
@@ -58,8 +58,13 @@ export class AtomaPayment extends Service {
             const balanceAgent = await this.getUSDCBalance(this.agentAccount);
             const balanceAtoma = await this.getUSDCBalance(this.atomaAccount);
 
-            elizaLogger.log(`USDC Balance for Agent Account (${this.agentAccount}): ${balanceAgent}`);
-            elizaLogger.log(`USDC Balance for Atoma Account (${this.atomaAccount}): ${balanceAtoma}`);
+            const dollarBalanceAgent = (Number(balanceAgent) / 1000000).toFixed(2);
+            const dollarBalanceAtoma = (Number(balanceAtoma) / 1000000).toFixed(2); 
+
+            // Log the balances in USD format
+            elizaLogger.log(`USDC Balance for Agent Account (${this.agentAccount}): $${dollarBalanceAgent}`);
+            elizaLogger.log(`USDC Balance for Atoma Account (${this.atomaAccount}): $${dollarBalanceAtoma}`);
+
         } catch (error) {
             console.error('Error tracking USDC balances:', error);
         }
