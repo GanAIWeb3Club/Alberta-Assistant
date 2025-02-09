@@ -1,4 +1,4 @@
-# Alberta AI Assistant overview (Sui Agent Typhoon Hackathon)
+# [```Alberta```] AI Assistant overview (Sui Agent Typhoon Hackathon)
 
 <img src="docs/pics/alberta-bot.jpg" alt="Alt text" width="100" height="100" /> 
 
