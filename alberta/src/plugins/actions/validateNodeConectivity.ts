@@ -3,6 +3,7 @@ import { composeContext, elizaLogger } from "@elizaos/core";
 import { generateMessageResponse, generateText } from "@elizaos/core";
 import { extractDomainNameTemplate, summarizeAvailabilityReportTemplate } from "./templates.ts";
 import { cleanModelResponse } from "./utils.ts";
+import { resolveTargetsFromTheCache } from "./utils.ts";
 
 import {
     type Action,
@@ -115,8 +116,8 @@ export const validateNodeConnection: Action = {
             modelClass: ModelClass.LARGE,
         }); 
 
-        // Add type assertion or validation
-        const targets = (namesResponse.targets || []) as string[];
+        let targets = (namesResponse.targets || []) as string[];
+        targets = await resolveTargetsFromTheCache(runtime, message, targets);
 
         const scanner = new NetworkDiagnosticScanner();
         for await (const [target, testResult] of scanner.scanMultipleTargets(targets)){

@@ -16,6 +16,7 @@ export async function initializeClients(
 
   if (clientTypes.includes("telegram")) {
     const telegramClient = await TelegramClientInterface.start(runtime);
+    (telegramClient as any).bot.options.handlerTimeout = 300000; //TODO: create a feature request to add such parameter
     if (telegramClient) clients.push(telegramClient);
   }
 

@@ -1,9 +1,9 @@
-import { composeContext, elizaLogger, generateObject, generateText } from "@elizaos/core";
-import { generateMessageResponse, generateTrueOrFalse } from "@elizaos/core";
+import { composeContext, elizaLogger, generateText } from "@elizaos/core";
+import { generateMessageResponse } from "@elizaos/core";
 import { exec } from "child_process";
 import { promisify } from "util";
 import { extractDomainNameTemplate, summarizePortsScanReportTemplate } from "./templates.ts";
-import { cleanModelResponse } from "./utils.ts";
+import { cleanModelResponse, resolveTargetsFromTheCache } from "./utils.ts";
 
 import {
     type Action,
@@ -131,8 +131,9 @@ export const scanPorts: Action = {
             modelClass: ModelClass.LARGE,
         }); 
 
-        // Add type assertion or validation
-        const targets = (response.targets || []) as string[];
+        let targets = (response.targets || []) as string[];
+        targets = await resolveTargetsFromTheCache(runtime, message, targets);
+
         const scanner = new NetworkScanner();
         for await (const scanResult of  scanner.scanTargets(targets)) {
             state.scanResult = JSON.stringify(scanResult);

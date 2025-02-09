@@ -59,7 +59,7 @@ export function createAgent(
     plugins: [
       bootstrapPlugin,
       nodePlugin,
-      suiPlugin
+      // suiPlugin
     ].filter(Boolean),
     providers: [],
     actions: [],
