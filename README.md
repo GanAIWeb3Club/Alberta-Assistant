@@ -25,30 +25,27 @@ The project takes on a significant challenge—securing server nodes in real tim
 1. **Scanning Tools Used**:
 
 - **Nmap**: A powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
-- **network-diagnostics** a library for diagnosing network problems:
+- **network-diagnostics** a library for diagnosing network problems
 
 ## 💡 Process Flow
   
 ```mermaid
-graph TD;
-    User-->| Server IP/Host | TelegramBot-Eliza
-    TelegramBot-Eliza -->|Connects SUI wallet| SUIWallet
-    SUIWallet -->|Get host/IP| VPS
-    VPS -->|Checks server correctness & scan possibility| InitialScanCheck
-    InitialScanCheck -->|Verifies user's SUI balance| SUIBalance
-    SUIBalance -->|Requests top-up if needed| TopUp
-    TopUp -->|Checks Atoma balance| AtomaBalance
-    AtomaBalance -->|Sends USDC to Atoma if needed| USDCTransfer
-    USDCTransfer -->|Sends scan results to Atoma LLM  & retrieves action plan| Scan
-    Scan -->|Host/IP Full scan data| Deepseak
-    Deepseak -->|Generates Summary report| Formatter
-    Deepseak -->|Provides tokens stats| Formatter
-    Formatter -->|Asks for user feedback & rating | User
-    Formatter -->|Crafts user satisfaction form | Feedback
-    Feedback -->|Final response to user| TelegramBot-Eliza
-    TelegramBot-Eliza -->|Scanning report, status| User
-```
+sequenceDiagram
+    participant User
+    participant AlbertaBot
 
+    User ->> AlbertaBot: Server IP/Host scan request
+    AlbertaBot ->> AlbertaBot: Retrieves Host/IP
+    AlbertaBot ->> AlbertaBot: Checks server correctness & scan possibility
+    AlbertaBot ->> AlbertaBot: Checks Atoma and self SUI balance
+    AlbertaBot ->> AlbertaBot: Sends USDC to Atoma (if needed)
+    AlbertaBot ->> User: Sends analysis starting notification
+    AlbertaBot ->> AlbertaBot: Performs Host/IP full scan
+    AlbertaBot ->> AlbertaBot: Sends scan results to Atoma LLM & retrieves action plan
+    AlbertaBot ->> AlbertaBot: Generates Summary Report
+    AlbertaBot ->> User: Sends scanning report & status
+    
+```
 
 ## 💡 Accounts check flow
 
