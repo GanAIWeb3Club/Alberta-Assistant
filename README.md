@@ -107,6 +107,11 @@ DEFAULT_LOG_LEVEL=debug pnpm start --dev
 
 Based on [Sui Agent Typhoon Participant Handbook ](https://notion.sui.io/sui-agent-typhoon-handbook)
 
+
+### Partially re-used/adjusted codebase:
+- [Eliza plugin-sui](https://github.com/elizaOS/eliza/tree/v0.1.9/packages/plugin-sui)
+- [eliza-starter](https://github.com/elizaOS/eliza-starter)
+
 ---
 
 ## 📬 Contact Us
