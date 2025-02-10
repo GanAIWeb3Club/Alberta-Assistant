@@ -6,7 +6,8 @@
 ```🚺 Alberta: I am ready to check your servers... Go ON! ```   
 ```👪 You: Tell me about my server vulnerabilities. IP XXX.XXX.XXX.XXX or DOMAIN NAME```   
 
-> Bot link: https://t.me/AlbertaAssistantBot
+> 🤖 Bot link: https://t.me/AlbertaAssistantBot  
+> 🎞 Demo video: https://youtu.be/IWE8rewF6jk?si=SLvCAZOfYnCQX2Ao
 
 Alberta AI Assistant 🤖 is an innovative Telegram bot designed to enhance the cybersecurity of server nodes through AI-driven analysis and secure server management. By scanning ports, detecting vulnerabilities, and offering actionable solutions, the bot aims to provide seamless protection for IT infrastructure.
 
