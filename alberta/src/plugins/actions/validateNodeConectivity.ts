@@ -16,11 +16,17 @@ import {
     type State,
 } from "@elizaos/core";
 
+/**
+ * Represents the result of an individual connectivity test
+ */
 interface TestResult {
     status: boolean;
     message: string;
 }
 
+/**
+ * Collection of different connectivity tests for a target
+ */
 interface TargetTests {
     connection: TestResult;
     dns: TestResult;
@@ -29,17 +35,33 @@ interface TargetTests {
     https: TestResult;
 }
 
+/**
+ * Report containing test results for multiple targets
+ */
 interface DiagnosticReport {
     [target: string]: TargetTests;
 }
 
+/**
+ * Scanner utility to perform network connectivity diagnostics on target hosts
+ */
 export class NetworkDiagnosticScanner {
+    /**
+     * Converts a callback-based function into a Promise
+     * @param fn Function that takes a callback as parameter
+     * @returns Promise that resolves with the callback result
+     */
     private promisify<T>(fn: (callback: (result: T) => void) => void): Promise<T> {
         return new Promise((resolve) => {
             fn(resolve);
         });
     }
 
+    /**
+     * Runs a complete set of connectivity tests for a single target
+     * @param target The hostname or IP to test
+     * @returns Object containing results of all connectivity tests
+     */
     private async runIndividualTests(target: string): Promise<TargetTests> {
         diagnostics.setTestURL(target);
 
@@ -75,6 +97,11 @@ export class NetworkDiagnosticScanner {
         };
     }
 
+    /**
+     * Scans multiple targets sequentially and yields results for each
+     * @param targets Array of hostnames or IPs to test
+     * @yields Tuple containing target and its test results
+     */
     public async *scanMultipleTargets(targets: string[]): AsyncGenerator<[string, TargetTests]> {
         for (const target of targets) {
             try {
@@ -93,6 +120,10 @@ export class NetworkDiagnosticScanner {
     }
 }
 
+/**
+ * Action that validates network connectivity to specified hosts or domains
+ * Performs comprehensive connectivity checks including DNS, ping, HTTP, and HTTPS
+ */
 export const validateNodeConnection: Action = {
     name: "VALIDATE_HOST_CONNECTIVITY_ACTION",
     similes: ["VALIDATE_DOMAIN_CONNECTIVITY_ACTION", "CHECK_HOST_CONNECTIVITY_ACTION", "CHECK_DOMAIN_CONNECTIVITY_ACTION"],

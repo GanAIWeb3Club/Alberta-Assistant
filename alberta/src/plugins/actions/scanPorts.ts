@@ -19,20 +19,29 @@ import {
 
 const execAsync = promisify(exec);
 
+/**
+ * Interface representing the result of an Nmap port scan
+ */
 interface NmapResult {
-    target: string;
-    output: string;
-    error?: string;
-    timestamp: Date;
-    duration: number;  // scan duration in milliseconds
+    target: string;      // The scanned target (IP or domain)
+    output: string;      // Raw output from the nmap command
+    error?: string;      // Error message if scan failed
+    timestamp: Date;     // When the scan was performed
+    duration: number;    // Scan duration in milliseconds
 }
 
+/**
+ * Class responsible for performing network port scans using Nmap
+ */
 export class NetworkScanner {
     private readonly defaultTimeout = 300000; // 5 minutes
     private readonly nmapCommand = 'timeout 180s nmap {target} -p 1-65535 -sV -O -v';
 
     /**
-     * Sanitizes target input to prevent command injection
+     * Sanitizes and validates a target input to prevent command injection
+     * @param target - The target IP address or domain name to sanitize
+     * @returns The sanitized target string
+     * @throws Error if target format is invalid
      */
     private sanitizeTarget(target: string): string {
         // Remove any shell special characters and whitespace
@@ -52,6 +61,12 @@ export class NetworkScanner {
         return sanitized;
     }
 
+    /**
+     * Executes an Nmap scan against a single target
+     * @param target - The target IP address or domain to scan
+     * @param timeout - Optional timeout in milliseconds (defaults to 5 minutes)
+     * @returns Promise resolving to the scan results
+     */
     private async runNmapScan(target: string, timeout: number = this.defaultTimeout): Promise<NmapResult> {
         const startTime = Date.now();
         
@@ -87,6 +102,12 @@ export class NetworkScanner {
         }
     }
 
+    /**
+     * Scans multiple targets sequentially, yielding results as they complete
+     * @param targets - Array of target IPs or domains to scan
+     * @param timeout - Optional timeout for each individual scan
+     * @yields NmapResult for each completed scan
+     */
     public async *scanTargets(
         targets: string[], 
         timeout?: number
@@ -108,6 +129,11 @@ export class NetworkScanner {
     }
 }
 
+/**
+ * Action definition for port scanning functionality
+ * Allows users to scan ports on specified hosts or domains using Nmap
+ * Includes input validation, target resolution, and formatted result reporting
+ */
 export const scanPorts: Action = {
     name: "SCAN_PORTS_ACTION",
     similes: ["CHECK_PORTS_ACTION", "SCAN_PORT_ACTION"],
