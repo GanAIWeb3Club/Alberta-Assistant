@@ -39,7 +39,7 @@ sequenceDiagram
     AlbertaBot ->> AlbertaBot: RetrieveAction (Host/IP,etc)
     AlbertaBot ->> AlbertaBot: Checks server correctness & scan possibility
     AlbertaBot ->> AlbertaBot: Checks Atoma and self SUI balance
-    AlbertaBot ->> AlbertaBot: Sends USDC to Atoma (if needed)
+    AlbertaBot ->> AtomaLLM: Sends SUI USDC to Atoma (if needed)
     AlbertaBot ->> User: Sends analysis starting notification
     AlbertaBot ->> AlbertaBot: Performs Host/IP full scan
     AlbertaBot ->> AtomaLLM: Sends scan results to Atoma LLM (DeepSeek) & retrieves action plan
