@@ -33,16 +33,18 @@ The project takes on a significant challenge—securing server nodes in real tim
 sequenceDiagram
     participant User
     participant AlbertaBot
+    participant AtomaLLM
 
     User ->> AlbertaBot: Server IP/Host scan request
-    AlbertaBot ->> AlbertaBot: Retrieves Host/IP
+    AlbertaBot ->> AlbertaBot: RetrieveAction (Host/IP,etc)
     AlbertaBot ->> AlbertaBot: Checks server correctness & scan possibility
     AlbertaBot ->> AlbertaBot: Checks Atoma and self SUI balance
     AlbertaBot ->> AlbertaBot: Sends USDC to Atoma (if needed)
     AlbertaBot ->> User: Sends analysis starting notification
     AlbertaBot ->> AlbertaBot: Performs Host/IP full scan
-    AlbertaBot ->> AlbertaBot: Sends scan results to Atoma LLM & retrieves action plan
-    AlbertaBot ->> AlbertaBot: Generates Summary Report
+    AlbertaBot ->> AtomaLLM: Sends scan results to Atoma LLM (DeepSeek) & retrieves action plan
+    AtomaLLM ->> AlbertaBot: Provides summary and action plan
+    AlbertaBot ->> AlbertaBot: Generates Telegram message Summary Report
     AlbertaBot ->> User: Sends scanning report & status
     
 ```
