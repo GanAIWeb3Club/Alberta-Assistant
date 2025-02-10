@@ -40,6 +40,8 @@ sequenceDiagram
     AtomaLLM ->> AlbertaBot: Target Action for execution
     AlbertaBot ->> AlbertaBot: Checks server correctness & scan possibility
     AlbertaBot ->> AlbertaBot: Checks Atoma and self SUI balance
+    AlbertaBot ->> User: Top-up Agent SUI balance (if balance < 2$ USDC)
+    User ->> AlbertaBot: Sends SUI USDC to Agent wallet
     AlbertaBot ->> AtomaLLM: Sends SUI USDC to Atoma (if needed)
     AlbertaBot ->> User: Sends analysis starting notification
     AlbertaBot ->> AlbertaBot: Performs Host/IP full scan
