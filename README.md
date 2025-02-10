@@ -36,7 +36,8 @@ sequenceDiagram
     participant AtomaLLM
 
     User ->> AlbertaBot: Server IP/Host scan request
-    AlbertaBot ->> AlbertaBot: RetrieveAction (Host/IP,etc)
+    AlbertaBot ->> AtomaLLM: Retrieve Action (Host/IP,etc)
+    AtomaLLM ->> AlbertaBot: Target Action for execution
     AlbertaBot ->> AlbertaBot: Checks server correctness & scan possibility
     AlbertaBot ->> AlbertaBot: Checks Atoma and self SUI balance
     AlbertaBot ->> AtomaLLM: Sends SUI USDC to Atoma (if needed)
