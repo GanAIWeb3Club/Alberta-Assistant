@@ -44,7 +44,7 @@ export const resolveTargetsFromTheCache = async (runtime: IAgentRuntime, message
 export const topUpAtomaBalanceStatus = async (runtime: IAgentRuntime): Promise<boolean> => {
     const requestPaymentStatus = await runtime.cacheManager.get(ATOMA_PAYMENT_CACHE_KEY) as boolean || false;
     elizaLogger.debug(`Do we need to top up the agent balance: ${requestPaymentStatus}`);
-    return requestPaymentStatus;
+    return !requestPaymentStatus;
 }
 
 /**

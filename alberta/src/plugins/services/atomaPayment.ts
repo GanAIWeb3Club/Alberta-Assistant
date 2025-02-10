@@ -33,6 +33,14 @@ export class AtomaPayment extends Service {
     }
 
     /**
+     * Returns the initialized Sui Client instance.
+     * @returns {SuiClient} The SuiClient instance used for interacting with the Sui network.
+     */
+    public getSuiClient(): SuiClient {
+        return this.suiClient;
+    } 
+
+    /**
      * Fetch the USDC balance for a given address.
      * @param address - The address to query.
      * @returns The USDC balance as a string.
@@ -88,6 +96,38 @@ export class AtomaPayment extends Service {
         } catch (error) {
             elizaLogger.error('Error tracking Atoma USDC balances:', error);
         }
+    }
+
+    /**
+     * Returns the agent's account address.
+     * @returns {string} The Sui address of the agent's account.
+     */
+    public getAgentAccount(): string {
+        return this.agentAccount;
+    }
+
+    /**
+     * Returns the Atoma account address.
+     * @returns {string} The Sui address of the Atoma account.
+     */
+    public getAtomaAccount(): string {
+        return this.atomaAccount;
+    }
+
+    /**
+     * Returns the coin type (by default it's USDC type, but it's specific for SUI network).
+     * @returns {string} The coin type.
+     */
+    public getCoinType(): string {
+        return this.coinType;
+    }
+
+    /**
+     * Returns SUI NETWORK.
+     * @returns {SuiNetwork} SUI NETWORK.
+     */
+    public getNetwork(): SuiNetwork {
+        return this.network;
     }
 
 }

@@ -1,10 +1,10 @@
 # [```Alberta```] Cybersecurity AI Assistant (Sui Agent Typhoon Hackathon)
 
-<img src="docs/pics/alberta-bot.jpg" alt="Alt text" width="100" height="100" /> 
+<img src="docs/pics/alberta-bot.jpg" alt="Alt text" width="400" height="400" /> 
 
 
 ```🚺 Alberta: I am ready to check your servers... Go ON! ```   
-```👪 You: Tell me about my server vulnerabilities. IP XXX.XXX.XXX.XXX```   
+```👪 You: Tell me about my server vulnerabilities. IP XXX.XXX.XXX.XXX or DOMAIN NAME```   
 
 > Bot link: https://t.me/AlbertaAssistantBot
 
@@ -16,14 +16,16 @@ The project takes on a significant challenge—securing server nodes in real tim
 
 ## 🚀 Features
 
+1. **Host/DomainName availability**: Runs network avalaibility checks
 1. **Port Scanning**: Scans server nodes for open ports
 1. **Vulnerability Detection**: Detects known vulnerabilities on servers and provides recommendations.
 1. **Telegram Integration**: Summarizes vulnerabilities and solutions in easy-to-read summaries via Telegram.
 1. **SUI Wallet**: Integration with SUI wallet for secure interactions and transactions.
-1. **USDC Transactions**: Facilitates USDC transfers for resolving vulnerabilities (To be implemented).
+1. **USDC Transactions**: Facilitates USDC transfers to pay for ATOMA service.
 1. **Scanning Tools Used**:
 
 - **Nmap**: A powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
+- **network-diagnostics** a library for diagnosing network problems:
 
 ## 💡 Process Flow
   
@@ -45,23 +47,17 @@ graph TD;
     Formatter -->|Crafts user satisfaction form | Feedback
     Feedback -->|Final response to user| TelegramBot-Eliza
     TelegramBot-Eliza -->|Scanning report, status| User
-
-  %% Highlight nodes with "To be implemented" in blue
-    style SUIWallet fill:#0077CC,stroke:#0077CC,stroke-width:2px
-    style TopUp fill:#0077CC,stroke:#0077CC,stroke-width:2px
-    style USDCTransfer fill:#0077CC,stroke:#0077CC,stroke-width:2px
-
 ```
 
 > Note: Highlighted actions are to be implemented in the future.
 
 ## 🛠️ Tools & Technologies
 
-The bot currently handles scanning and vulnerability detection. Integration with ```SUI wallets``` and transaction handling (such as sending USDC) is under development.
+The bot currently handles scanning and vulnerability detection. Integration with ```SUI wallets``` and transaction handling (such as sending USDC).
 
 The bot is built using the ```ElizaOS``` framework, ensuring maintainability and scalability. The implementation follows best practices for blockchain integration and Telegram bot development.
 
-The integration of ```Atoma LLM provider``` for generating vulnerability reports within Telegram is a unique and innovative application of AI for real-time security reporting. The use of SUI blockchain for secure wallet management and transactions adds another layer of sophistication.
+The integration of ```Atoma LLM provider``` for generating vulnerability reports, is a unique and innovative application of AI for real-time security reporting. The use of SUI blockchain for secure wallet management and transactions adds another layer of sophistication.
 
 Host scanner tool **Nmap** is a powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
 
@@ -95,9 +91,6 @@ DEFAULT_LOG_LEVEL=debug pnpm start --dev
 ```
 
 ## Planned Features
-
-1. **SUI Wallet Integration**: Users will be able to connect their SUI wallet to the bot, allowing for secure transactions and interaction.
-1. **Automated USDC Transactions**: The bot will automatically send USDC from its wallet to Atoma to resolve any identified vulnerabilities.
 1. **Expanded Vulnerability Database**: Continuous improvement of the AI’s vulnerability detection capabilities, expanding beyond open ports.
 1. **Token Usage and LLM Cost Calculation**: The bot will calculate the costs associated with using the Atoma LLM for generating reports and provide this information to users.
 1. **User Feedback**: The bot will prompt users for feedback and ratings of the scan results.

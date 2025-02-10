@@ -1,5 +1,7 @@
 import BigNumber from "bignumber.js";
+import { Transaction } from "@mysten/sui/transactions";
 import { AtomaPayment } from "../services/atomaPayment";
+import { getTransactionLink, parseAccount } from "../suiUtils.ts";
 
 import {
     elizaLogger,
@@ -26,8 +28,25 @@ export const atomaProvider: Provider = {
         const threshold = new BigNumber(2000000);
         if (atomaUSDCBalance.isLessThan(threshold) && agentUSDCBalance.isGreaterThanOrEqualTo(threshold)){
             // transfer
+            const suiAccount = parseAccount(runtime);
+            const suiClient = suiService.getSuiClient();
+            const agentCoins = await suiClient.getCoins({
+                owner: suiService.getAgentAccount(),
+                coinType: suiService.getCoinType()
+            });
+
+            const tx = new Transaction();
+            const [coin] = tx.splitCoins(agentCoins.data[0].coinObjectId, ['2000000']); // Transfer 2$ USDC
+            tx.transferObjects([coin], suiService.getAtomaAccount());   
+            const executedTransaction =
+                await suiClient.signAndExecuteTransaction({
+                    signer: suiAccount,
+                    transaction: tx,
+                });
+            
+            const transactionLink = getTransactionLink(suiService.getNetwork(), executedTransaction.digest);
+            elizaLogger.log(`Top up ATOMA balance. Digest: ${executedTransaction.digest}; \n Transaction: ${transactionLink}`)
             runtime.cacheManager.set(ATOMA_PAYMENT_CACHE_KEY, false);
-            elizaLogger.log('Transfer 2 USDC from the Agent acc to Atoma acc.');
         } else if(agentUSDCBalance.isLessThan(threshold)) {
             runtime.cacheManager.set(ATOMA_PAYMENT_CACHE_KEY, true);
             elizaLogger.log('Need to top-up the Agent balance.');
