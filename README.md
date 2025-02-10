@@ -49,7 +49,18 @@ graph TD;
     TelegramBot-Eliza -->|Scanning report, status| User
 ```
 
-> Note: Highlighted actions are to be implemented in the future.
+
+## 💡 Accounts check flow
+
+```mermaid
+graph TD;
+    Check_Agent_and_Atoma_Balances -->| AgentAcc >= 2$ and AtomaAcc < 2$ | Agent_sends_2$_to_AtomaAcc
+    Agent_sends_2$_to_AtomaAcc --> Check_Agent_and_Atoma_Balances
+    Check_Agent_and_Atoma_Balances -->| AgentAcc < 2$ | Ask_User_to_send_min_2$_to_AgentAcc
+    Ask_User_to_send_min_2$_to_AgentAcc --> Check_Agent_and_Atoma_Balances
+    Check_Agent_and_Atoma_Balances -->| else | Check_Agent_and_Atoma_Balances
+```
+
 
 ## 🛠️ Tools & Technologies
 
@@ -91,7 +102,7 @@ DEFAULT_LOG_LEVEL=debug pnpm start --dev
 ```
 
 ## Planned Features
-1. **Expanded Vulnerability Database**: Continuous improvement of the AI’s vulnerability detection capabilities, expanding beyond open ports.
+1. **Expanded Vulnerability Database**: Continuous improvement of the AI’s vulnerability detection capabilities, expanding beyond open ports and networking.
 1. **Token Usage and LLM Cost Calculation**: The bot will calculate the costs associated with using the Atoma LLM for generating reports and provide this information to users.
 1. **User Feedback**: The bot will prompt users for feedback and ratings of the scan results.
 
