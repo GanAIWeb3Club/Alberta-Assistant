@@ -108,8 +108,8 @@ DEFAULT_LOG_LEVEL=debug pnpm start --dev
 
 - **Track:** Atoma/ElizaOS
 - **Tools:**  
-  - [Eliza Framework](https://github.com/ai16z)  
-  - [Atoma ](https://cloud.atoma.network/)  
+  - [Eliza Framework](https://github.com/ai16z) - Implementation reference >>>  [index.ts](/alberta/src/index.ts#L7)
+  - [Atoma ](https://cloud.atoma.network/)  - Implementation reference >>> [index.ts](/alberta/src/chat/index.ts#L1)
   - [Telegram Bot API](https://core.telegram.org/bots)
 
 Based on [Sui Agent Typhoon Participant Handbook ](https://notion.sui.io/sui-agent-typhoon-handbook)
