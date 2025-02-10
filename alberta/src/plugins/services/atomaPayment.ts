@@ -45,7 +45,7 @@ export class AtomaPayment extends Service {
             });
             return balance.totalBalance;
         } catch (error) {
-            console.error(`Failed to fetch USDC balance for address ${address}:`, error);
+            elizaLogger.error(`Failed to fetch USDC balance for address ${address}:`, error);
             throw error;
         }
     }
@@ -66,7 +66,28 @@ export class AtomaPayment extends Service {
             elizaLogger.log(`USDC Balance for Atoma Account (${this.atomaAccount}): $${dollarBalanceAtoma}`);
 
         } catch (error) {
-            console.error('Error tracking USDC balances:', error);
+            elizaLogger.error('Error tracking USDC balances:', error);
         }
     }
+
+    public async getAgentUSDCBalances(): Promise<string> {
+        try {
+            const agentBalance = await this.getUSDCBalance(this.agentAccount);
+            elizaLogger.log(`USDC Balance for Agent Account (${this.agentAccount}): ${agentBalance}`);
+            return agentBalance;
+        } catch (error) {
+            elizaLogger.error('Error tracking Agent USDC balances:', error);
+        }
+    }
+
+    public async getAtomaUSDCBalances(): Promise<string> {
+        try {
+            const atomaBalance = await this.getUSDCBalance(this.atomaAccount);
+            elizaLogger.log(`USDC Balance for Agent Account (${this.atomaAccount}): ${atomaBalance}`);
+            return atomaBalance;
+        } catch (error) {
+            elizaLogger.error('Error tracking Atoma USDC balances:', error);
+        }
+    }
+
 }
