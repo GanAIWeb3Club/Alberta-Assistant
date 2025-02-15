@@ -7,9 +7,12 @@ import { ATOMA_PAYMENT_CACHE_KEY } from "../providers/atomaProvider.ts";
  * @returns The cleaned string with think blocks removed
  */
 export const cleanModelResponse = (response: string) => {
-    // Remove think block if present
-    const thinkBlockRegex = /<think>[\s\S]*?<\/think>/;
-    return response.replace(thinkBlockRegex, '').trim();
+    // Remove everything up to and including </think> tag if present
+    const thinkEndIndex = response.indexOf('</think>');
+    if (thinkEndIndex !== -1) {
+        return response.substring(thinkEndIndex + 8).trim(); // 8 is length of '</think>'
+    }
+    return response.trim();
 }
 
 /**
@@ -44,7 +47,7 @@ export const resolveTargetsFromTheCache = async (runtime: IAgentRuntime, message
 export const topUpAtomaBalanceStatus = async (runtime: IAgentRuntime): Promise<boolean> => {
     const requestPaymentStatus = await runtime.cacheManager.get(ATOMA_PAYMENT_CACHE_KEY) as boolean || false;
     elizaLogger.debug(`Do we need to top up the agent balance: ${requestPaymentStatus}`);
-    return !requestPaymentStatus;
+    return requestPaymentStatus;
 }
 
 /**
