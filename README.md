@@ -77,7 +77,9 @@ Host scanner tool **Nmap** is a powerful tool for network discovery and vulnerab
 
 ## 🌟 Agent setup
 
+See [Install NodeJS](https://nodejs.org/en/download)
 Node v23 is required to run the agent (```nvm install 23.3.0```).
+Activate pnpm: `corepack enable pnpm`
 
 1. Clone the Repository
 
