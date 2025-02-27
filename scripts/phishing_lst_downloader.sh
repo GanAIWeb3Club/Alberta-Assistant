@@ -15,8 +15,8 @@ echo "Downloading and extracting ALL-phishing-links.tar.gz..."
 curl -sL https://phish.co.za/latest/ALL-phishing-links.tar.gz | tar xz
 
 # Copy the .lst files to the target directory
-echo "Copying .lst files to $TARGET_DIR..."
-cp ALL-phishing-domains.lst "$TARGET_DIR/"
-cp ALL-phishing-links.lst "$TARGET_DIR/"
+echo "Moving .lst files to $TARGET_DIR..."
+mv ALL-phishing-domains.lst "$TARGET_DIR/"
+mv ALL-phishing-links.lst "$TARGET_DIR/"
 
 echo "Update completed successfully!"

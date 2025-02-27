@@ -614,6 +614,26 @@ export const phishingCheckAction: Action = {
                 },
             },
         ],
+
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "Check it",
+                    action: "CHECK_PHISHING_URL_ACTION",
+                },
+            },
+        ],
+
+        [
+            {
+                user: "{{user1}}",
+                content: {
+                    text: "test.example.org",
+                    action: "CHECK_PHISHING_URL_ACTION",
+                },
+            },
+        ],
         
         [
             {

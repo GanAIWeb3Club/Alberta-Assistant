@@ -75,6 +75,23 @@ The integration of ```Atoma LLM provider``` for generating vulnerability reports
 
 Host scanner tool **Nmap** is a powerful tool for network discovery and vulnerability scanning, used to check open ports and identify services running on a server.
 
+## 🌟 User setup
+Create user:
+`adduser alberta`
+
+Change user:
+`su alberta`
+
+Install NMAP:
+```bash
+sudo apt update
+sudo apt install nmap
+```
+
+Edit sudo config:
+`sudo visudo`
+add `alberta ALL=(ALL) NOPASSWD: /usr/bin/nmap`
+
 ## 🌟 Agent setup
 
 See [Install NodeJS](https://nodejs.org/en/download)
@@ -88,13 +105,20 @@ git clone https://github.com/yourusername/alberta-ai-assistant.git
 cd alberta
 ```
 
-2. Install Dependencies
+2. Schedule phishing database updates
+```bash
+crontab -e
+```
+add 
+```*/30 * * * * /home/alberta/Alberta-Assistant/scripts/phishing_lst_downloader.sh``` # runs each 30 min
+
+3. Install Dependencies
 
 ```bash
 pnpm clean && pnpm install && pnpm build
 ```
 
-3. Start agent
+4. Start agent
 
 ```bash
 pnpm start
