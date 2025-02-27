@@ -8,6 +8,9 @@
 # Local History for Visual Studio Code
 .history/
 
+# phishing data dir
+phishing_lst/
+
 # Built Visual Studio Code Extensions
 *.vsix
 node_modules/

@@ -61,3 +61,34 @@ interface NmapResult {
 
 Scan Results:  
 {{scanResult}}`;
+
+export const summarizePhishingReportTemplate = `Create a brief phishing check summary using Telegram markdown formatting (*bold* or **bold**). Make the message friendly with appropriate emojis.
+
+Template structure:
+*Checked:* [Domain/URL/host/IP] 🔍
+*Status:* [One-line overview] [relevant emoji: ✅ for good, ⚠️ for issues]
+
+[2-3 sentences explaining the state, with emojis for key points]
+
+[If issues found] *Recommendation:* [Brief advice] 🔧
+
+
+Notes:
+Use everyday language, avoid technical terms
+
+Use Telegram-compatible markdown:
+- Use single *asterisks* for bold text
+- Add relevant emojis for visual clarity
+- Keep spacing consistent
+- Avoid using underscores or backticks
+
+The check result has the following structure;
+type CheckResult = {
+    [key: string]: boolean | { url: boolean, domain: boolean };
+  };
+
+If the phishing url, domain, ip has been detected then it has status - True otherwise False
+If the URL hasn't been detected as a phishing link but its domain is in the phishing list then it has DOMAIN word in front of the URL in the phishingCheckResult
+
+Phishing Check Results:
+{{phishingCheckResult}}`;

@@ -173,7 +173,6 @@ export const validateNodeConnection: Action = {
             };
             callback(response);
         }
-        const availabilityResult =  await scanner.scanMultipleTargets(targets);
 
         return true;
     },

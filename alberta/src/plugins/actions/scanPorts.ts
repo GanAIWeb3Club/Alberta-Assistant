@@ -190,7 +190,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Can you scan the ports for 192.168.1.1?",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -200,7 +200,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for api.example.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -210,7 +210,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Check which ports are open on www.mywebsite.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -220,7 +220,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Run a port scan on 10.0.0.5.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -230,7 +230,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for google.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -240,7 +240,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Check the open ports on 8.8.8.8.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -250,7 +250,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for subdomain.test.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -260,7 +260,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Run a port scan on 172.16.254.1.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -270,7 +270,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Check which ports are open on server-01.example.org.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -280,7 +280,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for 192.168.0.100.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -290,7 +290,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Run a port scan on api.services.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -300,7 +300,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Check the open ports on 10.10.10.10.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -310,7 +310,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for secure.example.net.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -320,7 +320,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Run a port scan on 203.0.113.1.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -330,7 +330,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Check which ports are open on lb.example.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -340,7 +340,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for 192.168.2.1.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -350,7 +350,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Run a port scan on www.oldwebsite.com.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -360,7 +360,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Check the open ports on 10.1.1.1.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -370,7 +370,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Scan the ports for test.example.org.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ],
@@ -380,7 +380,7 @@ export const scanPorts: Action = {
                 user: "{{user1}}",
                 content: {
                     text: "Run a port scan on 192.168.10.10.",
-                    action: "SCAN_PORTS",
+                    action: "SCAN_PORTS_ACTION",
                 },
             },
         ]
