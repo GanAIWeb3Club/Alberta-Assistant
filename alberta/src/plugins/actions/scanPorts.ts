@@ -35,7 +35,7 @@ interface NmapResult {
  */
 export class NetworkScanner {
     private readonly defaultTimeout = 300000; // 5 minutes
-    private readonly nmapCommand = 'sudo timeout 180s nmap {target} -p 1-65535 -sV -O -v';
+    private readonly nmapCommand = 'timeout 180s nmap -Pn -p 1-65535 -sV {target} -v';
 
     /**
      * Sanitizes and validates a target input to prevent command injection

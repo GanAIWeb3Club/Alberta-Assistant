@@ -88,10 +88,6 @@ sudo apt update
 sudo apt install nmap
 ```
 
-Edit sudo config:
-`sudo visudo`
-add `alberta ALL=(ALL) NOPASSWD: /usr/bin/nmap`
-
 ## 🌟 Agent setup
 
 See [Install NodeJS](https://nodejs.org/en/download)
