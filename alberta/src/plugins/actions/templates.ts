@@ -40,7 +40,6 @@ Diagnostic Results:
 {{availabilityResult}}`;
 
 export const summarizePortsScanReportTemplate = `Please provide a brief, user-friendly summary of the port scan results in a format suitable for Telegram. Use **bold text**, emojis, and bullet points for clarity. Follow this structure:
-
 1. **Start with the target** (IP/hostname) in bold.  
 2. **OS & Uptime**: Include the likely operating system and uptime in bold.  
 3. **Open Ports**: List each open port with a short description and status. Use bold for port numbers and statuses.  
