@@ -86,7 +86,7 @@ Install NMAP:
 ```bash
 sudo apt update
 sudo apt install nmap
-sudo chmod u+s /usr/bin/nmap
+sudo chmod u+s /usr/bin/nmap # should be reconsidered!!!
 ```
 
 ## 🌟 Agent setup

@@ -35,7 +35,7 @@ interface NmapResult {
  */
 export class NetworkScanner {
     private readonly defaultTimeout = 300000; // 5 minutes
-    private readonly nmapCommand = 'timeout 180s nmap {target} -p 1-65535 -sV -O';
+    private readonly nmapCommand = 'timeout 180s nmap {target} -p 1-65535 -sV -O 2>&1 | grep -v -E "SF|WARNING"'; // Rollback when context will be wider
 
     /**
      * Sanitizes and validates a target input to prevent command injection

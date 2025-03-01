@@ -42,10 +42,10 @@ export const balanceEvaluator: Evaluator = {
         [key: string]: unknown;
     }, callback?: HandlerCallback): Promise<void> => {
         elizaLogger.debug('balanceEvaluator handler.');
-        if(topUpAtomaBalanceStatus(runtime)){
+        if(await topUpAtomaBalanceStatus(runtime)){
             // Depends on the Client implementation. Some clients don't pass callback parameter.
             if (callback && typeof callback === 'function') {
-                notifyUserAboutAtomaPayments(message, callback);
+                await notifyUserAboutAtomaPayments(message, callback);
             }
         }
         return;

@@ -1,4 +1,5 @@
 import type { Plugin } from "@elizaos/core";
+import { accountStatus } from "./actions/accountState.ts";
 import { phishingCheckAction } from "./actions/phishingCheck.ts";
 import { scanPorts } from "./actions/scanPorts.ts";
 import { validateNodeConnection } from "./actions/validateNodeConectivity.ts";
@@ -13,6 +14,7 @@ export const nodePlugin: Plugin = {
         phishingCheckAction,
         validateNodeConnection,
         scanPorts,
+        accountStatus,
     ],
     evaluators: [ balanceEvaluator ],
     providers: [ atomaProvider ],

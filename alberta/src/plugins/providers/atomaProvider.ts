@@ -26,6 +26,14 @@ export const atomaProvider: Provider = {
         const agentUSDCBalance = new BigNumber(await suiService.getAgentUSDCBalances());
         const atomaUSDCBalance = new BigNumber(await suiService.getAtomaUSDCBalances());
         const threshold = new BigNumber(2000000);
+        
+        if (agentUSDCBalance.isGreaterThanOrEqualTo(threshold)){
+            runtime.cacheManager.set(ATOMA_PAYMENT_CACHE_KEY, false);
+        } else {
+            elizaLogger.log('Need to top-up the Agent balance.');
+            runtime.cacheManager.set(ATOMA_PAYMENT_CACHE_KEY, true);
+        }
+
         if (atomaUSDCBalance.isLessThan(threshold) && agentUSDCBalance.isGreaterThanOrEqualTo(threshold)){
             // transfer
             const suiAccount = parseAccount(runtime);
@@ -46,10 +54,6 @@ export const atomaProvider: Provider = {
             
             const transactionLink = getTransactionLink(suiService.getNetwork(), executedTransaction.digest);
             elizaLogger.log(`Top up ATOMA balance. Digest: ${executedTransaction.digest}; \n Transaction: ${transactionLink}`)
-            runtime.cacheManager.set(ATOMA_PAYMENT_CACHE_KEY, false);
-        } else if(agentUSDCBalance.isLessThan(threshold)) {
-            runtime.cacheManager.set(ATOMA_PAYMENT_CACHE_KEY, true);
-            elizaLogger.log('Need to top-up the Agent balance.');
         }
     }
 }
